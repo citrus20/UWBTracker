@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">UWBTracker</string>
+    <string name="title_home">Home</string>
+    <string name="title_dashboard">Dashboard</string>
+    <string name="title_notifications">Notifications</string>
+    <string name="url_fieldname">Loc. Server URL</string>
+    <string name="locserver_default">ws://172.24.1.1/ws/tracking</string>
+</resources>
