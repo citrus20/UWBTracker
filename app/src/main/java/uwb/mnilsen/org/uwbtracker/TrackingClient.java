@@ -1,10 +1,14 @@
 package uwb.mnilsen.org.uwbtracker;
 
+import android.util.Log;
+
 import org.java_websocket.client.WebSocketClient;
 import org.java_websocket.handshake.ServerHandshake;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by michaeln on 8/30/17.
@@ -12,6 +16,7 @@ import java.net.URISyntaxException;
 
 public class TrackingClient extends WebSocketClient {
     private URI uri;
+    private List<TrackingEventListener> listeners = new ArrayList<>();
 
     public TrackingClient(URI serverURI) {
         super(serverURI);
@@ -42,23 +47,39 @@ public class TrackingClient extends WebSocketClient {
 
     }
 
+    public void addTrackingEventListener(TrackingEventListener l)
+    {
+        this.listeners.add(l);
+    }
+
+    public void removeTrackingEventListener(TrackingEventListener l)
+    {
+        this.listeners.remove(l);
+    }
+
     @Override
     public void onOpen(ServerHandshake handshakedata) {
-        System.out.println(String.format("Connection opened: %s",handshakedata.getHttpStatusMessage()));
+        log(String.format("Connection opened: %s",handshakedata.getHttpStatusMessage()));
     }
 
     @Override
     public void onMessage(String message) {
-        System.out.println(String.format("Message: %s",message));
+        log(String.format("Message: %s",message));
     }
 
     @Override
     public void onClose(int code, String reason, boolean remote) {
-        System.out.println(String.format("Connection closed: %s",reason));
+        log(String.format("Connection closed: %s",reason));
     }
 
     @Override
     public void onError(Exception ex) {
-        System.out.println(String.format("Websocket error: %s",ex.getMessage()));
+        log(String.format("Websocket error: %s",ex.getMessage()));
+    }
+
+    private void log(String msg)
+    {
+        //System.out.println(msg);
+        Log.i("TrackingClient",msg);
     }
 }

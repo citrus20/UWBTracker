@@ -1,8 +1,16 @@
 <resources>
     <string name="app_name">UWBTracker</string>
-    <string name="title_home">Home</string>
+    <string name="title_home">Settings</string>
     <string name="title_dashboard">Dashboard</string>
-    <string name="title_notifications">Notifications</string>
+    <string name="title_notifications">Debug</string>
     <string name="url_fieldname">Loc. Server URL</string>
     <string name="locserver_default">ws://172.24.1.1/ws/tracking</string>
+    <string name="json_label">Raw JSON</string>
+    <string name="x_offset">X Offset</string>
+    <string name="y_offset">Y Offset</string>
+    <string name="x_scale">X Scale</string>
+    <string name="y_scale">Y Scale</string>
+    <string name="run_lbl">Run</string>
+    <string name="stop_lbl">Stop</string>
+    <string name="zero_lbl">Zero</string>
 </resources>
