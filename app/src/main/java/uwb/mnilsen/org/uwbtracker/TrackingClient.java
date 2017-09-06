@@ -65,6 +65,10 @@ public class TrackingClient extends WebSocketClient {
     @Override
     public void onMessage(String message) {
         log(String.format("Message: %s",message));
+        for(TrackingEventListener l:this.listeners)
+        {
+            l.handleTrackingEvent(message);
+        }
     }
 
     @Override
@@ -74,12 +78,18 @@ public class TrackingClient extends WebSocketClient {
 
     @Override
     public void onError(Exception ex) {
-        log(String.format("Websocket error: %s",ex.getMessage()));
+        log(String.format("Websocket error: %s",ex.getMessage(),ex));
     }
 
     private void log(String msg)
     {
         //System.out.println(msg);
         Log.i("TrackingClient",msg);
+    }
+
+    private void log(String msg,Throwable e)
+    {
+        //System.out.println(msg);
+        Log.w("TrackingClient",msg,e);
     }
 }

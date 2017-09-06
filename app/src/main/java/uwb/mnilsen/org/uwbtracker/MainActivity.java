@@ -4,11 +4,17 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.CompoundButton;
 import android.widget.GridLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.ToggleButton;
+
+import java.net.URI;
+import java.net.URISyntaxException;
 
 public class MainActivity extends AppCompatActivity implements TrackingEventListener {
 
@@ -18,6 +24,7 @@ public class MainActivity extends AppCompatActivity implements TrackingEventList
     private GridLayout settingsGrid;
     private GridLayout debugGrid;
     private ImageView dashPanel;
+    private ToggleButton runButton;
 
     private TrackingClient tracking;
 
@@ -62,12 +69,39 @@ public class MainActivity extends AppCompatActivity implements TrackingEventList
         this.settingsGrid = (GridLayout) findViewById(R.id.setings_pnl);
         this.debugGrid = (GridLayout) findViewById(R.id.debug_pnl);
         this.dashPanel = (ImageView) findViewById(R.id.img_pnl);
+        this.runButton = (ToggleButton) findViewById(R.id.runButton);
+
+        runButton.setOnCheckedChangeListener(new ToggleListener(this));
+
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
     }
 
-    @Override
-    public void handleTrackingEvent() {
+    private class ToggleListener implements CompoundButton.OnCheckedChangeListener {
+        TrackingEventListener listener;
+        public ToggleListener(TrackingEventListener listener) {
+            this.listener = listener;
+        }
 
+        public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+            if (isChecked) {
+                String url = urlText.getText().toString();
+                try {
+                    tracking = new TrackingClient(new URI(url));
+                    tracking.addTrackingEventListener(this.listener);
+                    tracking.start();
+                } catch (URISyntaxException e) {
+                    Log.w("LocTrackMain",String.format("Invalid URI: %s",url),e);
+                }
+            } else {
+                if(tracking != null) tracking.stop();
+                tracking = null;
+            }
+        }
+    }
+
+    @Override
+    public void handleTrackingEvent(String msg) {
+        this.jsonText.setText(msg);
     }
 }

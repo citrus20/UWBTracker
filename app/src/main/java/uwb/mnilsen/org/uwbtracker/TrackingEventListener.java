@@ -5,5 +5,5 @@ package uwb.mnilsen.org.uwbtracker;
  */
 
 public interface TrackingEventListener {
-    void handleTrackingEvent();
+    void handleTrackingEvent(String msg);
 }

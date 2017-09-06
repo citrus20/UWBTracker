@@ -4,7 +4,7 @@
     <string name="title_dashboard">Dashboard</string>
     <string name="title_notifications">Debug</string>
     <string name="url_fieldname">Loc. Server URL</string>
-    <string name="locserver_default">ws://172.24.1.1/ws/tracking</string>
+    <string name="locserver_default">ws://10.0.0.157:8080/ws/tracking</string>
     <string name="json_label">Raw JSON</string>
     <string name="x_offset">X Offset</string>
     <string name="y_offset">Y Offset</string>
