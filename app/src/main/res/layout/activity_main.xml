@@ -59,7 +59,7 @@
                 android:layout_height="wrap_content" />
 
             <EditText
-                android:id="@+id/editText"
+                android:id="@+id/x_offset"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="3dp"
@@ -79,7 +79,7 @@
                 android:layout_height="wrap_content" />
 
             <EditText
-                android:id="@+id/editText3"
+                android:id="@+id/y_offset"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="3dp"
@@ -99,7 +99,7 @@
                 android:layout_height="wrap_content" />
 
             <EditText
-                android:id="@+id/editText4"
+                android:id="@+id/x_scale"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="3dp"
@@ -119,7 +119,7 @@
                 android:layout_height="wrap_content" />
 
             <EditText
-                android:id="@+id/editText5"
+                android:id="@+id/y_scale"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="3dp"
@@ -144,6 +144,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="3dp"
+                android:focusedByDefault="true"
                 android:text="ToggleButton"
                 android:textOff="@string/run_lbl"
                 android:textOn="@string/stop_lbl" />

@@ -3,6 +3,7 @@ package uwb.mnilsen.org.uwbtracker;
 import android.util.Log;
 
 import org.java_websocket.client.WebSocketClient;
+import org.java_websocket.drafts.Draft_17;
 import org.java_websocket.handshake.ServerHandshake;
 
 import java.net.URI;
@@ -19,7 +20,7 @@ public class TrackingClient extends WebSocketClient {
     private List<TrackingEventListener> listeners = new ArrayList<>();
 
     public TrackingClient(URI serverURI) {
-        super(serverURI);
+        super(serverURI, new Draft_17());
         this.uri = uri;
     }
 
@@ -78,6 +79,7 @@ public class TrackingClient extends WebSocketClient {
 
     @Override
     public void onError(Exception ex) {
+        ex.printStackTrace();
         log(String.format("Websocket error: %s",ex.getMessage(),ex));
     }
 
