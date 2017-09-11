@@ -23,14 +23,14 @@ import org.json.JSONObject;
 import java.net.URI;
 import java.net.URISyntaxException;
 
-public class MainActivity extends AppCompatActivity implements TrackingEventListener {
+public class MainActivity extends AppCompatActivity {
 
     private TextView mTextMessage;
     private TextView urlText;
     private TextView jsonText;
     private GridLayout settingsGrid;
     private GridLayout debugGrid;
-    private ImageView dashPanel;
+    private DashView dashPanel;
     private ToggleButton runButton;
     private Button zeroButton;
     private TextView x_offsetText;
@@ -82,7 +82,7 @@ public class MainActivity extends AppCompatActivity implements TrackingEventList
         this.jsonText = (TextView) findViewById(R.id.jsonText);
         this.settingsGrid = (GridLayout) findViewById(R.id.setings_pnl);
         this.debugGrid = (GridLayout) findViewById(R.id.debug_pnl);
-        this.dashPanel = (ImageView) findViewById(R.id.img_pnl);
+        this.dashPanel = (DashView) findViewById(R.id.img_pnl);
         this.runButton = (ToggleButton) findViewById(R.id.runButton);
         this.zeroButton = (Button) findViewById(R.id.zeroButton);
         this.x_offsetText = (TextView) findViewById(R.id.x_offset);
@@ -93,14 +93,13 @@ public class MainActivity extends AppCompatActivity implements TrackingEventList
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
-        runButton.setOnCheckedChangeListener(new ToggleListener(this));
         this.zeroButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 startZeroingProcess();
             }
         });
-
+        this.runButton.setOnCheckedChangeListener(new ToggleListener());
         loadTranslationText();
     }
 
@@ -121,46 +120,29 @@ public class MainActivity extends AppCompatActivity implements TrackingEventList
     private void startZeroingProcess() {
         this.zeroing = true;
         AsyncTask task = new ZeroTask();
-        task.execute(new Integer[]{});
+        task.execute(new Integer[0]);
     }
 
     private class ToggleListener implements CompoundButton.OnCheckedChangeListener {
-        TrackingEventListener listener;
 
-        public ToggleListener(TrackingEventListener listener) {
-            this.listener = listener;
+        public ToggleListener() {
+
         }
 
         public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
             if (isChecked) {
                 String url = urlText.getText().toString();
                 try {
-                    tracking = new TrackingClient(new URI(url));
-                    tracking.addTrackingEventListener(this.listener);
-                    tracking.start();
-                } catch (URISyntaxException e) {
-                    Log.w("LocTrackMain", String.format("Invalid URI: %s", url), e);
+                    dashPanel.setUri(urlText.getText().toString());
+                    retrieveTranslationText();
+                    dashPanel.start(trans);
+                } catch (Exception e) {
+                    Log.w("LocTrackMain", String.format("Startup: %s", e.getMessage()), e);
                 }
             } else {
-                if (tracking != null) tracking.stop();
-                tracking = null;
-                //  clear dashboard
+                dashPanel.stop();
             }
         }
-    }
-
-    @Override
-    public void handleTrackingEvent(String msg) {
-        JSONArray jarr;
-        try {
-            jarr = new JSONArray(msg);
-        } catch (JSONException e) {
-            Log.e("LocTrackMain", String.format("JSON parse error: %s", msg), e);
-            return;
-        }
-        JSONObject obj;
-        EventUpdateTask task = new EventUpdateTask();
-        task.execute(new String[]{msg});
     }
 
     class EventUpdateTask  extends AsyncTask<String, String, Integer> {
