@@ -105,7 +105,7 @@
                 android:layout_margin="3dp"
                 android:ems="10"
                 android:inputType="numberDecimal"
-                android:text="0.0" />
+                android:text="1.0" />
 
             <TextView
                 android:id="@+id/textView6"
@@ -125,7 +125,7 @@
                 android:layout_margin="3dp"
                 android:ems="10"
                 android:inputType="numberDecimal"
-                android:text="0.0" />
+                android:text="1.0" />
 
             <Space
                 android:layout_width="wrap_content"
@@ -144,10 +144,13 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="3dp"
+                android:focusableInTouchMode="true"
                 android:focusedByDefault="true"
                 android:text="ToggleButton"
                 android:textOff="@string/run_lbl"
-                android:textOn="@string/stop_lbl" />
+                android:textOn="@string/stop_lbl" >
+                <requestFocus/>
+                </ToggleButton>
 
             <Space
                 android:layout_width="wrap_content"

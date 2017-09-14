@@ -65,7 +65,7 @@ public class TrackingClient extends WebSocketClient {
 
     @Override
     public void onMessage(String message) {
-        log(String.format("Message: %s",message));
+        //log(String.format("Message: %s",message));
         for(TrackingEventListener l:this.listeners)
         {
             l.handleTrackingEvent(message);

@@ -8,10 +8,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.GridLayout;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
@@ -77,6 +77,9 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+        this.getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+
         mTextMessage = (TextView) findViewById(R.id.message);
         this.urlText = (TextView) findViewById(R.id.urlText);
         this.jsonText = (TextView) findViewById(R.id.jsonText);
@@ -104,17 +107,15 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void loadTranslationText() {
-        this.x_offsetText.setText(Integer.toString(this.trans.getxOffset()));
-        this.y_offsetText.setText(Integer.toString(this.trans.getyOffset()));
-        this.x_scaleText.setText(Float.toString(this.trans.getxScale()));
-        this.y_scaleText.setText(Float.toString(this.trans.getyScale()));
+        this.x_offsetText.setText(Float.toString(this.trans.getZoneXOffset()));
+        this.y_offsetText.setText(Float.toString(this.trans.getZoneYOffset()));
+        this.x_scaleText.setText(Float.toString(this.trans.getScale()));
     }
 
     private void retrieveTranslationText() {
-        this.trans.setxOffset(Integer.parseInt(this.x_offsetText.getText().toString()));
-        this.trans.setyOffset(Integer.parseInt(this.y_offsetText.getText().toString()));
-        this.trans.setxScale(Float.parseFloat(this.x_scaleText.getText().toString()));
-        this.trans.setyScale(Float.parseFloat(this.y_scaleText.getText().toString()));
+        this.trans.setZoneXOffset(Integer.parseInt(this.x_offsetText.getText().toString()));
+        this.trans.setZoneYOffset(Integer.parseInt(this.y_offsetText.getText().toString()));
+        this.trans.setScale(Float.parseFloat(this.x_scaleText.getText().toString()));
     }
 
     private void startZeroingProcess() {
@@ -183,7 +184,7 @@ public class MainActivity extends AppCompatActivity {
                 }
                 tc.stop();
                 zeroing = false;
-                Toast.makeText(getApplicationContext(), "Zero calibration completed", Toast.LENGTH_LONG);
+
             }
             catch (URISyntaxException e) {
                 Log.e("LocTrackMain", String.format("Invalid URI: %s", uri), e);
@@ -194,8 +195,9 @@ public class MainActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(Integer integer) {
             super.onPostExecute(integer);
-            x_offsetText.setText(Integer.toString(trans.getxOffset()));
-            y_offsetText.setText(Integer.toString(trans.getyOffset()));
+            x_offsetText.setText(Float.toString(trans.getZoneXOffset()));
+            y_offsetText.setText(Float.toString(trans.getZoneYOffset()));
+            Toast.makeText(getApplicationContext(), "Zero calibration completed", Toast.LENGTH_LONG).show();
         }
 
         private class ZeroTrackingEventListener implements TrackingEventListener {
@@ -223,8 +225,8 @@ public class MainActivity extends AppCompatActivity {
                         complete = true;
                         x = -this.xSum / this.sampleCount;
                         y = -this.ySum / this.sampleCount;
-                        trans.setxOffset(x);
-                        trans.setyOffset(y);
+                        trans.setZoneXOffset(x);
+                        trans.setZoneYOffset(y);
                     }
                 } catch (JSONException e) {
                     Log.e("LocTrackMain", String.format("JSON parse error: %s", msg), e);

@@ -5,53 +5,45 @@ package uwb.mnilsen.org.uwbtracker;
  */
 
 public class Translator {
-    private int xOffset = 0;
-    private int yOffset = 0;
-    private float xScale = 0.0f;
-    private float yScale = 0.0f;
+    private float zoneXOffset = 0;  //  in pixels
+    private float zoneYOffset = 0;  //  in pixels
+    private float tagXOffset = 0;  //  in mm
+    private float tagYOffset = 0;  //  in mm
+    private float scale = 1.0f;
     private float xRotation = 0.0f;
     private float yRotation = 0.0f;
 
     public Translator() {
     }
 
-    public Translator(int xOffset, int yOffset, float xScale, float yScale) {
-        this.xOffset = xOffset;
-        this.yOffset = yOffset;
-        this.xScale = xScale;
-        this.yScale = yScale;
+    public Translator(int xOffset, int yOffset, float xScale) {
+        this.zoneXOffset = xOffset;
+        this.zoneYOffset = yOffset;
+        this.scale = xScale;
     }
 
-    public int getxOffset() {
-        return xOffset;
+    public float getZoneXOffset() {
+        return zoneXOffset;
     }
 
-    public void setxOffset(int xOffset) {
-        this.xOffset = xOffset;
+    public void setZoneXOffset(float zoneXOffset) {
+        this.zoneXOffset = zoneXOffset;
     }
 
-    public int getyOffset() {
-        return yOffset;
+    public float getZoneYOffset() {
+        return zoneYOffset;
     }
 
-    public void setyOffset(int yOffset) {
-        this.yOffset = yOffset;
+    public void setZoneYOffset(float zoneYOffset) {
+        this.zoneYOffset = zoneYOffset;
     }
 
-    public float getxScale() {
-        return xScale;
+    public float getScale() {
+        return scale;
     }
 
-    public void setxScale(float xScale) {
-        this.xScale = xScale;
-    }
-
-    public float getyScale() {
-        return yScale;
-    }
-
-    public void setyScale(float yScale) {
-        this.yScale = yScale;
+    public void setScale(float scale) {
+        this.scale = scale;
     }
 
     public float getxRotation() {
@@ -70,15 +62,47 @@ public class Translator {
         this.yRotation = yRotation;
     }
 
-    public int getTranslatedX(int x)
+    public float getTranslatedX(float x)
     {
-        float f = x * this.xScale;
-        return Math.round(f) + this.xOffset;
+        float f = (x  * this.scale) + this.zoneXOffset;
+        return f;
     }
 
-    public int getTranslatedY(int y)
+    public float getTranslatedY(float y)
     {
-        float f = y * this.yScale;
-        return Math.round(f) + this.yOffset;
+        float f = (y * this.scale)  + this.zoneYOffset;
+        return f;
+    }
+
+    public float getTranslatedTagX(float x)
+    {
+        return this.getTranslatedX(x + this.tagXOffset);
+    }
+
+    public float getTranslatedTagY(float y)
+    {
+        return this.getTranslatedY(y + this.tagYOffset);
+    }
+
+    public static void main(String[] args)
+    {
+        Translator t = new Translator(0,0,0.5f);
+        System.out.println(String.format("X=%s, f(x)=%s",10,t.getTranslatedX(10)));
+        System.out.println(String.format("X=%s, f(x)=%s",100,t.getTranslatedX(100)));
+        System.out.println(String.format("X=%s, f(x)=%s",1000,t.getTranslatedX(1000)));
+        System.out.println(String.format("Y=%s, f(y)=%s",10,t.getTranslatedY(10)));
+        System.out.println(String.format("Y=%s, f(y)=%s",100,t.getTranslatedY(100)));
+        System.out.println(String.format("Y=%s, f(y)=%s",1000,t.getTranslatedY(1000)));
+    }
+
+    @Override
+    public String toString() {
+        return "Translator{" +
+                "zoneXOffset=" + zoneXOffset +
+                ", zoneYOffset=" + zoneYOffset +
+                ", scale=" + scale +
+                ", xRotation=" + xRotation +
+                ", yRotation=" + yRotation +
+                '}';
     }
 }
